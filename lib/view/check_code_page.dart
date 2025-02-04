@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/services/users_api.dart';
+import 'package:flutter_application_1/view/change_forgot_pass.dart';
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter_application_1/view/mail_controller.dart';
+import 'package:flutter_application_1/view/login_page.dart';
+
 
 class VerificationPage extends StatefulWidget {
   final String userEmail;
+  final String? userPassword;
+  final bool? isForgotPass;
 
-  const VerificationPage({super.key, required this.userEmail});
+  const VerificationPage({super.key, required this.userEmail,  this.userPassword, this.isForgotPass});
 
   @override
   _VerificationPageState createState() => _VerificationPageState();
@@ -37,7 +42,7 @@ class _VerificationPageState extends State<VerificationPage> {
   void _generateVerificationCode() {
     final random = Random();
     _verificationCode = (10000 + random.nextInt(90000)).toString();
-    EmailSender.sendVerificationEmail(recipientEmail: 'senpaihiga@gmail.com', verificationCode:_verificationCode);
+    // EmailSender.sendVerificationEmail(recipientEmail: 'senpaihiga@gmail.com', verificationCode:_verificationCode);
     print('Generated Code: $_verificationCode'); // For testing purposes
   }
 
@@ -54,7 +59,7 @@ class _VerificationPageState extends State<VerificationPage> {
     });
   }
 
-  void _verifyCode() {
+  Future<void> _verifyCode() async {
     if (_isCodeExpired) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Code has expired. Please request a new one.')),
@@ -63,7 +68,32 @@ class _VerificationPageState extends State<VerificationPage> {
     }
 
     if (_codeController.text == _verificationCode) {
-      Navigator.pushReplacementNamed(context, '/login'); // Navigate to login page
+      try {
+        if(widget.isForgotPass! == true){
+          Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => ChangePasswordPage(email: widget.userEmail)),
+          (route) => false,
+        );
+        return;
+        }
+        print("${widget.userEmail}");
+        await addUser(widget.userEmail, widget.userPassword!, 0);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sign Up Successful, Now Login')),
+        );
+        
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+          (route) => false,
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to sign up. Please try again.')),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid code. Please try again.')),

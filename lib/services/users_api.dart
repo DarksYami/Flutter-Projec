@@ -26,7 +26,7 @@ final _client = ApiService.client;
 
   //  Fetch user by email
   Future <List<dynamic>> fetchUserByEmail(String email) async {
-    final response = await _client.get(Uri.parse("$baseUrl?table=users&email=$email"));
+    final response = await _client.get(Uri.parse("$baseUrl?table=users&email=\"$email\""));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -35,12 +35,13 @@ final _client = ApiService.client;
   }
 
   // Add a user
-  Future<void> addUser(String email, String password) async {
+  Future<void> addUser(String email, String password, int isAdmin) async {
     final response = await _client.post(
       Uri.parse("$baseUrl?table=users"),
       body: jsonEncode({
         "email": email,
         "password": password,
+        "isAdmin": isAdmin
       }),
       headers: {"Content-Type": "application/json"},
     );
@@ -50,7 +51,7 @@ final _client = ApiService.client;
   }
 
   // Update a user
-  Future<void> updateUser(int id, String email, String password, bool isAdmin) async {
+  Future<void> updateUser(int id, String email, String password, int isAdmin) async {
     final response = await _client.put(
       Uri.parse("$baseUrl?table=users&id=$id"),
       body: jsonEncode({

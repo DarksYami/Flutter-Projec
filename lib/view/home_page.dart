@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/gifts.dart';
 import 'package:flutter_application_1/services/gifts_api.dart';
 import 'package:flutter_application_1/view/gift_detaild_page.dart';
+import 'package:flutter_application_1/view/profile_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
@@ -145,20 +146,26 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildGiftGrid(List<Gift> gifts) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.8,
-      ),
-      itemCount: gifts.length,
-      itemBuilder: (context, index) {
-        return _buildGiftCard(gifts[index]);
-      },
-    );
-  }
+Widget _buildGiftGrid(List<Gift> gifts) {
+  return GridView.builder(
+    shrinkWrap: true,
+    physics: NeverScrollableScrollPhysics(),
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      childAspectRatio: 0.8,
+    ),
+    itemCount: gifts.length,
+    itemBuilder: (context, index) {
+      return GestureDetector(
+        onTap: () {
+          // Handle tap event
+          _navigateToDetail(gifts[index]);
+        },
+        child: _buildGiftCard(gifts[index]),
+      );
+    },
+  );
+}
 
   Widget _buildGiftCard(Gift gift) {
     return Card(
@@ -266,7 +273,12 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(width: 40.w),  // Responsive space
           IconButton(icon: Icon(Icons.shopping_cart), onPressed: () {}),
-          IconButton(icon: Icon(Icons.person), onPressed: () {}),
+          IconButton(icon: Icon(Icons.person), onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage())
+              );
+          }),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/colors.dart';
 import 'package:flutter_application_1/services/login_api.dart';
+import 'package:flutter_application_1/view/forgot_pass_page.dart';
 import 'package:flutter_application_1/view/sign_up_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -137,6 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                               }
                               return null;
                             },
+                            keyboardType: TextInputType.emailAddress,
                           ),
                           SizedBox(height: 20.h),
 
@@ -262,14 +264,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class ForgotPasswordPage extends StatelessWidget {
-  const ForgotPasswordPage({super.key});
+// class ForgotPasswordPage extends StatelessWidget {
+//   const ForgotPasswordPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Forgot Password')),
-      body: const Center(child: Text('Password recovery page')),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('Forgot Password')),
+//       body: const Center(child: Text('Password recovery page')),
+//     );
+//   }
+// }

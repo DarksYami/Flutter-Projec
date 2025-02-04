@@ -5,7 +5,6 @@ import 'package:flutter_application_1/model/gifts.dart';
 String baseUrl = ApiService.baseUrl;
 final _client = ApiService.client;
 
-
 // Fetch all gifts
 Future<List<Gift>> fetchGifts() async {
   final response = await _client.get(Uri.parse("$baseUrl?table=gifts"));
@@ -39,35 +38,37 @@ Future<List<Gift>> fetchGiftsByCategory(String category) async {
 }
 
 // Add a gift
-Future<void> addGift(String name, double price, String imageUrl, String category) async {
+Future<void> addGift(String name, double price, String image, int quantity, String category) async {
   final response = await _client.post(
     Uri.parse("$baseUrl?table=gifts"),
     body: jsonEncode({
       "name": name,
       "price": price,
-      "imageUrl": imageUrl,
+      "image": image,
+      "quantity": quantity,
       "category": category,
     }),
     headers: {"Content-Type": "application/json"},
   );
-  if (response.statusCode != 200) {
+  if (response.statusCode != 201) { // Assuming 201 Created for a successful addition
     throw Exception('Failed to add gift');
   }
 }
 
 // Update a gift
-Future<void> updateGift(int id, String name, double price, String imageUrl, String category) async {
+Future<void> updateGift(int id, String name, double price, String image, int quantity, String category) async {
   final response = await _client.put(
     Uri.parse("$baseUrl?table=gifts&id=$id"),
     body: jsonEncode({
       "name": name,
       "price": price,
-      "imageUrl": imageUrl,
+      "image": image,
+      "quantity": quantity,
       "category": category,
     }),
     headers: {"Content-Type": "application/json"},
   );
-  if (response.statusCode != 200) {
+  if (response.statusCode != 200) { // Assuming 200 OK for a successful update
     throw Exception('Failed to update gift');
   }
 }
@@ -75,7 +76,7 @@ Future<void> updateGift(int id, String name, double price, String imageUrl, Stri
 // Delete a gift
 Future<void> deleteGift(int id) async {
   final response = await _client.delete(Uri.parse("$baseUrl?table=gifts&id=$id"));
-  if (response.statusCode != 200) {
+  if (response.statusCode != 200) { // Assuming 200 OK for a successful deletion
     throw Exception('Failed to delete gift');
   }
 }

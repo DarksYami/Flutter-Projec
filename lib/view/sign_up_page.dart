@@ -223,6 +223,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   MaterialPageRoute(
                                     builder: (context) => VerificationPage(
                                       userEmail: _emailController.text,
+                                      userPassword: _passwordController.text
                                     ),
                                   ),
                                 );

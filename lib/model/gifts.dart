@@ -1,5 +1,5 @@
 class Gift {
-  final String id;
+  final String? id;
   final String name;
   final String image;
   final double price;
@@ -7,7 +7,7 @@ class Gift {
   final int? quantity;
 
   Gift({
-    required this.id,
+    this.id,
     required this.name,
     required this.image,
     required this.price,
@@ -17,7 +17,7 @@ class Gift {
 
   factory Gift.fromJson(Map<String, dynamic> json) {
     return Gift(
-      id: json['id'].toString(), // Ensure this is a String
+      id: json['id'], 
       name: json['name'], // Ensure this is a String
       image: json['image'], // Ensure this is a String
       price: double.parse(json['price'].toString()), // Ensure this is a double
